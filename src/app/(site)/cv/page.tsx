@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { DownloadSimple, EnvelopeSimple } from "@phosphor-icons/react/dist/ssr";
 import { Markdown } from "@/components/Markdown";
 import {
   getCertifications,
@@ -33,12 +34,12 @@ export default async function CvPage() {
 
   return (
     <>
-      <header className="page-head">
+      <header className="page-head" data-reveal>
         <h1>{settings.full_name || "CV"}</h1>
         {settings.cv_intro ? <p>{settings.cv_intro}</p> : null}
       </header>
 
-      <section className="about" aria-label="About me">
+      <section className="about" aria-label="About me" data-reveal>
         {settings.avatar_url ? (
           <div className="about__portrait">
             <Image src={settings.avatar_url} alt={`Portrait of ${settings.full_name}`} width={448} height={560} sizes="14rem" priority />
@@ -51,10 +52,12 @@ export default async function CvPage() {
           <div className="about__actions">
             {settings.resume_url ? (
               <a className="button" href={settings.resume_url} target="_blank" rel="noopener noreferrer">
+                <DownloadSimple size={17} weight="bold" aria-hidden="true" />
                 Download CV (PDF)
               </a>
             ) : null}
             <Link className="button button--quiet" href="/contact">
+              <EnvelopeSimple size={17} weight="bold" aria-hidden="true" />
               Get in touch
             </Link>
           </div>
@@ -63,9 +66,10 @@ export default async function CvPage() {
 
       {experiences.length ? (
         <section className="cv-section" aria-labelledby="experience-heading">
-          <h2 id="experience-heading">Experience</h2>
+          <h2 id="experience-heading" data-reveal>Experience</h2>
+          <ol className="timeline">
           {experiences.map((role) => (
-            <div key={role.id} className="role">
+            <li key={role.id} className="role" data-current={role.is_current} data-kind={role.kind} data-reveal>
               <p className="role__when">
                 {dateRange(role.start_date, role.end_date, role.is_current)}
                 <span className="role__kind" data-kind={role.kind}>
@@ -95,16 +99,18 @@ export default async function CvPage() {
                   </ul>
                 ) : null}
               </div>
-            </div>
+            </li>
           ))}
+          </ol>
         </section>
       ) : null}
 
       {education.length ? (
         <section className="cv-section" aria-labelledby="education-heading">
-          <h2 id="education-heading">Education</h2>
+          <h2 id="education-heading" data-reveal>Education</h2>
+          <ol className="timeline">
           {education.map((ed) => (
-            <div key={ed.id} className="role">
+            <li key={ed.id} className="role" data-current={ed.in_progress} data-kind="education" data-reveal>
               <p className="role__when">{yearRange(ed.start_year, ed.end_year, ed.in_progress)}</p>
               <div>
                 <h3>{ed.degree}</h3>
@@ -118,17 +124,18 @@ export default async function CvPage() {
                   </ul>
                 ) : null}
               </div>
-            </div>
+            </li>
           ))}
+          </ol>
         </section>
       ) : null}
 
       {skills.length ? (
         <section className="cv-section" aria-labelledby="skills-heading">
-          <h2 id="skills-heading">Skills</h2>
+          <h2 id="skills-heading" data-reveal>Skills</h2>
           <dl className="skills">
-            {skills.map((group) => (
-              <div key={group.id}>
+            {skills.map((group, i) => (
+              <div key={group.id} data-reveal style={{ ["--i" as string]: i % 4 }}>
                 <dt>{group.name}</dt>
                 <dd>
                   <ul className="tags">
@@ -147,9 +154,9 @@ export default async function CvPage() {
 
       {certifications.length ? (
         <section className="cv-section" aria-labelledby="cert-heading">
-          <h2 id="cert-heading">Certifications</h2>
+          <h2 id="cert-heading" data-reveal>Certifications</h2>
           {certifications.map((c) => (
-            <div key={c.id} className="role">
+            <div key={c.id} className="role" data-reveal>
               <p className="role__when">{c.year ?? ""}</p>
               <div>
                 <h3>{c.url ? <a href={c.url} target="_blank" rel="noopener noreferrer">{c.name}</a> : c.name}</h3>
@@ -162,10 +169,10 @@ export default async function CvPage() {
 
       {testimonials.length ? (
         <section className="cv-section" aria-labelledby="quotes-heading">
-          <h2 id="quotes-heading">What people say</h2>
+          <h2 id="quotes-heading" data-reveal>What people say</h2>
           <ul className="quotes">
-            {testimonials.map((t) => (
-              <li key={t.id}>
+            {testimonials.map((t, i) => (
+              <li key={t.id} data-reveal style={{ ["--i" as string]: i }}>
                 <figure style={{ margin: 0 }}>
                   <blockquote>“{t.quote}”</blockquote>
                   <figcaption>

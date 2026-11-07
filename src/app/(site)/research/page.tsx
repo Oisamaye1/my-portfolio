@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ArrowUpRight } from "@phosphor-icons/react/dist/ssr";
 import { getPublications, getSettings } from "@/lib/data";
 
 export const revalidate = 3600;
@@ -14,13 +15,13 @@ export default async function ResearchPage() {
 
   return (
     <>
-      <header className="page-head">
+      <header className="page-head" data-reveal>
         <h1>Research</h1>
         {settings.research_intro ? <p>{settings.research_intro}</p> : null}
       </header>
 
       {settings.research_primary.length || settings.research_secondary.length ? (
-        <div className="interests">
+        <div className="interests" data-reveal>
           {settings.research_primary.length ? (
             <section className="interests--primary" aria-labelledby="primary-interests">
               <h2 id="primary-interests">Focus</h2>
@@ -45,15 +46,15 @@ export default async function ResearchPage() {
       ) : null}
 
       <section aria-labelledby="pubs-heading">
-        <h2 id="pubs-heading" className="subhead" style={{ marginTop: 0 }}>
+        <h2 id="pubs-heading" className="subhead" style={{ marginTop: 0 }} data-reveal>
           Publications and manuscripts
         </h2>
         {publications.length === 0 ? (
           <p className="empty">No publications listed yet.</p>
         ) : (
           <ol className="pubs">
-            {publications.map((pub) => (
-              <li key={pub.id} className="pub">
+            {publications.map((pub, i) => (
+              <li key={pub.id} className="pub" data-reveal style={{ ["--i" as string]: i }}>
                 <div>
                   <h3>{pub.title}</h3>
                   <p className="pub__cite">
@@ -63,12 +64,14 @@ export default async function ResearchPage() {
                   <p className="pub__foot">
                     {pub.status ? <span className="status">{pub.status}</span> : null}
                     {pub.doi ? (
-                      <a href={pub.url || `https://doi.org/${pub.doi}`} target="_blank" rel="noopener noreferrer">
+                      <a className="arrow-link" href={pub.url || `https://doi.org/${pub.doi}`} target="_blank" rel="noopener noreferrer">
                         DOI {pub.doi}
+                        <ArrowUpRight size={14} weight="bold" aria-hidden="true" />
                       </a>
                     ) : pub.url ? (
-                      <a href={pub.url} target="_blank" rel="noopener noreferrer">
+                      <a className="arrow-link" href={pub.url} target="_blank" rel="noopener noreferrer">
                         Read it
+                        <ArrowUpRight size={14} weight="bold" aria-hidden="true" />
                       </a>
                     ) : null}
                   </p>

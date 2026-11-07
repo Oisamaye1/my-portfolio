@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { EnvelopeSimple, MapPin, Phone } from "@phosphor-icons/react/dist/ssr";
+import { SocialIcon } from "@/components/SocialIcon";
 import { getSettings, getSocialLinks } from "@/lib/data";
 import { ContactForm } from "./ContactForm";
 
@@ -13,19 +15,19 @@ export default async function ContactPage() {
   const [settings, links] = await Promise.all([getSettings(), getSocialLinks()]);
   return (
     <>
-      <header className="page-head">
+      <header className="page-head" data-reveal>
         <h1>Contact</h1>
         {settings.contact_intro ? <p>{settings.contact_intro}</p> : null}
       </header>
       <div className="contact">
-        <section aria-label="Send a message">
+        <section aria-label="Send a message" data-reveal>
           <ContactForm />
         </section>
-        <aside className="contact-card" aria-label="Other ways to reach me">
+        <aside className="contact-card" aria-label="Other ways to reach me" data-reveal style={{ ["--i" as string]: 1 }}>
           <dl>
             {settings.email ? (
               <div>
-                <dt>Email</dt>
+                <dt><EnvelopeSimple size={15} aria-hidden="true" /> Email</dt>
                 <dd>
                   <a href={`mailto:${settings.email}`}>{settings.email}</a>
                 </dd>
@@ -33,7 +35,7 @@ export default async function ContactPage() {
             ) : null}
             {settings.show_phone && settings.phone ? (
               <div>
-                <dt>Phone</dt>
+                <dt><Phone size={15} aria-hidden="true" /> Phone</dt>
                 <dd>
                   <a href={`tel:${settings.phone.replace(/\s+/g, "")}`}>{settings.phone}</a>
                 </dd>
@@ -41,7 +43,7 @@ export default async function ContactPage() {
             ) : null}
             {settings.location ? (
               <div>
-                <dt>Based in</dt>
+                <dt><MapPin size={15} aria-hidden="true" /> Based in</dt>
                 <dd>{settings.location}</dd>
               </div>
             ) : null}
@@ -52,7 +54,8 @@ export default async function ContactPage() {
                   <ul>
                     {links.map((l) => (
                       <li key={l.id}>
-                        <a href={l.url} target="_blank" rel="noopener noreferrer me">
+                        <a className="icon-link" href={l.url} target="_blank" rel="noopener noreferrer me">
+                          <SocialIcon platform={l.platform} />
                           {l.label}
                         </a>
                       </li>

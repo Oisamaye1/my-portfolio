@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Trash } from "@phosphor-icons/react/dist/ssr";
 import { notFound } from "next/navigation";
 import { ConfirmButton } from "@/components/admin/ConfirmButton";
 import { RecordForm } from "@/components/admin/RecordForm";
@@ -57,6 +58,7 @@ export default async function EditRecordPage({
             question={`Delete “${title}”? This can't be undone.`}
             pendingLabel="Deleting…"
           >
+            <Trash size={15} weight="bold" aria-hidden="true" />
             Delete
           </ConfirmButton>
         }

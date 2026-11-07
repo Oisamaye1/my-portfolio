@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
+import GithubSlugger from "github-slugger";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ArrowLeft, ArrowRight } from "@phosphor-icons/react/dist/ssr";
+import { CopyLink, ReadingProgress, TocTracker } from "@/components/Article";
 import { Markdown } from "@/components/Markdown";
 import { getPost, getPublishedPosts } from "@/lib/data";
 import { formatDate, readingMinutes } from "@/lib/format";
@@ -29,6 +32,22 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
+/** Section headings in the post, with the same ids rehype-slug gives them. */
+function outline(markdown: string) {
+  const slugger = new GithubSlugger();
+  const items: { id: string; text: string; level: 2 | 3 }[] = [];
+  let inCode = false;
+  for (const line of markdown.split("\n")) {
+    if (line.trim().startsWith("```")) inCode = !inCode;
+    if (inCode) continue;
+    const m = /^(#{2,3})\s+(.+?)\s*#*\s*$/.exec(line);
+    if (!m) continue;
+    const text = m[2].replace(/[*_`]/g, "").replace(/\[([^\]]+)\]\([^)]*\)/g, "$1");
+    items.push({ id: slugger.slug(text), text, level: m[1].length as 2 | 3 });
+  }
+  return items;
+}
+
 export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const [post, all] = await Promise.all([getPost(slug), getPublishedPosts()]);
@@ -37,57 +56,90 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   const index = all.findIndex((p) => p.id === post.id);
   const newer = index > 0 ? all[index - 1] : null;
   const older = index >= 0 && index < all.length - 1 ? all[index + 1] : null;
+  const toc = outline(post.body);
+  const showToc = toc.filter((t) => t.level === 2).length >= 2;
 
   return (
-    <article className="article">
-      <Link href="/writing" className="article__back">
-        Writing
-      </Link>
-      <h1 className="article__title">{post.title}</h1>
-      {post.excerpt ? <p className="article__lede">{post.excerpt}</p> : null}
-      <div className="article__meta meta">
-        <time dateTime={post.published_at ?? undefined}>{formatDate(post.published_at)}</time>
-        <span>{readingMinutes(post.body)} min read</span>
-        {post.tags.length ? (
-          <ul className="tags">
-            {post.tags.map((t) => (
-              <li key={t}>
-                <Link className="tag" href={`/writing?tag=${encodeURIComponent(t)}`}>
-                  {t}
-                </Link>
-              </li>
-            ))}
-          </ul>
+    <>
+      <ReadingProgress />
+      <div className={showToc ? "article-layout" : undefined}>
+        <article className="article">
+          <Link href="/writing" className="article__back arrow-link arrow-link--back">
+            <ArrowLeft size={14} weight="bold" aria-hidden="true" />
+            Writing
+          </Link>
+          <h1 className="article__title" data-reveal>
+            {post.title}
+          </h1>
+          {post.excerpt ? (
+            <p className="article__lede" data-reveal style={{ ["--i" as string]: 1 }}>
+              {post.excerpt}
+            </p>
+          ) : null}
+          <div className="article__meta meta" data-reveal style={{ ["--i" as string]: 2 }}>
+            <time dateTime={post.published_at ?? undefined}>{formatDate(post.published_at)}</time>
+            <span>{readingMinutes(post.body)} min read</span>
+            {post.tags.length ? (
+              <ul className="tags">
+                {post.tags.map((t) => (
+                  <li key={t}>
+                    <Link className="tag" href={`/writing?tag=${encodeURIComponent(t)}`}>
+                      {t}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+            <CopyLink />
+          </div>
+          {post.cover_url ? (
+            <figure className="article__cover" style={{ margin: "2.5rem 0 0" }} data-reveal>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={post.cover_url} alt="" />
+            </figure>
+          ) : null}
+          <Markdown>{post.body}</Markdown>
+
+          {newer || older ? (
+            <nav className="article__footer" aria-label="More posts">
+              <div>
+                {older ? (
+                  <Link href={`/writing/${older.slug}`} className="pager">
+                    <span>
+                      <ArrowLeft size={13} weight="bold" aria-hidden="true" /> Previous post
+                    </span>
+                    <strong>{older.title}</strong>
+                  </Link>
+                ) : null}
+              </div>
+              <div className="next">
+                {newer ? (
+                  <Link href={`/writing/${newer.slug}`} className="pager">
+                    <span>
+                      Next post <ArrowRight size={13} weight="bold" aria-hidden="true" />
+                    </span>
+                    <strong>{newer.title}</strong>
+                  </Link>
+                ) : null}
+              </div>
+            </nav>
+          ) : null}
+        </article>
+
+        {showToc ? (
+          <aside className="toc" aria-label="On this page">
+            <p className="toc__title">On this page</p>
+            <ol>
+              {toc.map((t) => (
+                <li key={t.id} data-level={t.level}>
+                  <a href={`#${t.id}`}>{t.text}</a>
+                </li>
+              ))}
+            </ol>
+            <TocTracker ids={toc.map((t) => t.id)} />
+          </aside>
         ) : null}
       </div>
-      {post.cover_url ? (
-        <figure className="article__cover" style={{ margin: "2.5rem 0 0" }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={post.cover_url} alt="" />
-        </figure>
-      ) : null}
-      <Markdown>{post.body}</Markdown>
-
-      {newer || older ? (
-        <nav className="article__footer" aria-label="More posts">
-          <div>
-            {older ? (
-              <Link href={`/writing/${older.slug}`}>
-                <span>Previous post</span>
-                <strong>{older.title}</strong>
-              </Link>
-            ) : null}
-          </div>
-          <div className="next">
-            {newer ? (
-              <Link href={`/writing/${newer.slug}`}>
-                <span>Next post</span>
-                <strong>{newer.title}</strong>
-              </Link>
-            ) : null}
-          </div>
-        </nav>
-      ) : null}
-    </article>
+    </>
   );
 }

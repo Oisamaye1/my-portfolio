@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
 import { Markdown } from "@/components/Markdown";
 import { getProjects, getSettings } from "@/lib/data";
 import { ProjectLinks } from "./ProjectLinks";
@@ -19,7 +20,7 @@ export default async function ProjectsPage() {
 
   return (
     <>
-      <header className="page-head">
+      <header className="page-head" data-reveal>
         <h1>Projects</h1>
         {settings.projects_intro ? <p>{settings.projects_intro}</p> : null}
       </header>
@@ -27,7 +28,7 @@ export default async function ProjectsPage() {
       {projects.length === 0 ? <p className="empty">No projects to show yet.</p> : null}
 
       {featured.map((project, i) => (
-        <section key={project.id} className="feature" aria-labelledby={`p-${project.id}`}>
+        <section key={project.id} className="feature" aria-labelledby={`p-${project.id}`} data-reveal>
           <div>
             <h2 id={`p-${project.id}`}>
               <Link href={`/projects/${project.slug}`}>{project.title}</Link>
@@ -43,7 +44,12 @@ export default async function ProjectsPage() {
               </ul>
             ) : null}
             <p className="links">
-              {project.body ? <Link href={`/projects/${project.slug}`}>Read the write-up</Link> : null}
+              {project.body ? (
+                <Link className="arrow-link" href={`/projects/${project.slug}`}>
+                  Read the write-up
+                  <ArrowRight size={14} weight="bold" aria-hidden="true" />
+                </Link>
+              ) : null}
             </p>
             <ProjectLinks project={project} />
           </div>
@@ -68,10 +74,10 @@ export default async function ProjectsPage() {
 
       {rest.length ? (
         <>
-          <h2 className="subhead">More projects</h2>
+          <h2 className="subhead" data-reveal>More projects</h2>
           <ul className="project-grid">
-            {rest.map((project) => (
-              <li key={project.id}>
+            {rest.map((project, i) => (
+              <li key={project.id} className="project-card" data-reveal style={{ ["--i" as string]: i % 3 }}>
                 {project.cover_url ? (
                   <div className="shot">
                     <Image

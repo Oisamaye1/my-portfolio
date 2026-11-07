@@ -794,3 +794,157 @@
   display: grid;
   gap: 1rem;
 }
+
+/* ---------- Motion and feedback ---------- */
+.admin-nav a {
+  min-height: 2.5rem;
+  transition:
+    background-color var(--dur-2) var(--ease-out),
+    color var(--dur-2) var(--ease-out);
+}
+
+.admin-nav__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.admin-nav a svg {
+  color: var(--muted);
+  transition: color var(--dur-2) var(--ease-out);
+}
+
+.admin-nav a:hover svg {
+  color: var(--violet);
+}
+
+.admin-nav a[aria-current="page"] svg {
+  color: var(--amber);
+}
+
+.admin-side__foot a,
+.admin-side__foot button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2rem;
+}
+
+.admin-main {
+  animation: fade-up var(--dur-3) var(--ease-out) both;
+}
+
+.row {
+  border-radius: 6px;
+  transition: background-color var(--dur-2) var(--ease-out);
+}
+
+.row:hover {
+  background: color-mix(in srgb, var(--violet-soft) 60%, transparent);
+}
+
+.icon-btn {
+  transition:
+    border-color var(--dur-2) var(--ease-out),
+    color var(--dur-2) var(--ease-out),
+    transform var(--dur-1) var(--ease-out);
+}
+
+.icon-btn:active:not(:disabled) {
+  transform: scale(0.92);
+}
+
+.flash {
+  animation: fade-up var(--dur-3) var(--ease-out) both;
+}
+
+.savebar__status[data-status="saved"],
+.savebar__status[data-status="error"] {
+  animation: fade-in var(--dur-3) var(--ease-out) both;
+}
+
+.savebar__status[data-status="saved"]::before {
+  content: "";
+  display: inline-block;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--ok);
+  margin-right: 0.5rem;
+  vertical-align: 0.1em;
+}
+
+.stats a {
+  transition: background-color var(--dur-2) var(--ease-out);
+}
+
+.media-grid li {
+  transition:
+    border-color var(--dur-2) var(--ease-out),
+    box-shadow var(--dur-2) var(--ease-out);
+}
+
+.media-grid li:hover {
+  border-color: var(--rule-strong);
+  box-shadow: var(--shadow-2);
+}
+
+.dropzone {
+  transition:
+    border-color var(--dur-2) var(--ease-out),
+    background-color var(--dur-2) var(--ease-out);
+}
+
+.md__tabs button,
+.md__tools button,
+.md__tools label {
+  transition:
+    background-color var(--dur-1) var(--ease-out),
+    color var(--dur-1) var(--ease-out);
+}
+
+.afield input,
+.afield select,
+.afield textarea {
+  transition:
+    border-color var(--dur-2) var(--ease-out),
+    box-shadow var(--dur-2) var(--ease-out);
+}
+
+.afield input:focus,
+.afield select:focus,
+.afield textarea:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--violet) 20%, transparent);
+}
+
+.password {
+  position: relative;
+}
+
+.afield .password input {
+  padding-right: 3rem;
+}
+
+.password__toggle {
+  position: absolute;
+  top: 50%;
+  right: 0.25rem;
+  transform: translateY(-50%);
+  width: 2.5rem;
+  height: 2.5rem;
+  display: grid;
+  place-items: center;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  border-radius: 6px;
+}
+
+.password__toggle:hover {
+  color: var(--ink);
+}
+
+.login__card {
+  animation: fade-up var(--dur-4) var(--ease-out) both;
+}

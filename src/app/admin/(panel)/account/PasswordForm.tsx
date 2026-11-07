@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import { PasswordInput } from "@/components/admin/PasswordInput";
 import { changePassword, type FormState } from "../../actions";
 
 export function PasswordForm() {
@@ -10,13 +11,13 @@ export function PasswordForm() {
     <form action={action} className="aform" style={{ maxWidth: "24rem" }} noValidate>
       <div className="afield" data-invalid={!!errors.password}>
         <label htmlFor="password">New password</label>
-        <input id="password" name="password" type="password" autoComplete="new-password" minLength={10} required />
+        <PasswordInput id="password" name="password" autoComplete="new-password" minLength={10} required />
         <span className="afield__help">At least 10 characters.</span>
         {errors.password ? <span className="afield__error">{errors.password}</span> : null}
       </div>
       <div className="afield" data-invalid={!!errors.confirm}>
         <label htmlFor="confirm">Type it again</label>
-        <input id="confirm" name="confirm" type="password" autoComplete="new-password" required />
+        <PasswordInput id="confirm" name="confirm" autoComplete="new-password" required />
         {errors.confirm ? <span className="afield__error">{errors.confirm}</span> : null}
       </div>
       <div>

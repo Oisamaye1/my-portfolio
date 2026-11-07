@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ArrowSquareOut, SignOut, UserCircle } from "@phosphor-icons/react/dist/ssr";
 import { AdminNav } from "@/components/admin/AdminNav";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { requireAdmin } from "@/lib/auth";
@@ -19,21 +20,22 @@ export default async function PanelLayout({ children }: { children: React.ReactN
     {
       title: "Site",
       items: [
-        { href: "/admin", label: "Overview" },
-        { href: "/admin/settings", label: "Pages & profile" },
-        { href: "/admin/messages", label: "Messages", count: unread ?? 0 },
-        { href: "/admin/media", label: "Media library" },
+        { href: "/admin", label: "Overview", icon: "overview" as const },
+        { href: "/admin/settings", label: "Pages & profile", icon: "settings" as const },
+        { href: "/admin/messages", label: "Messages", icon: "messages" as const, count: unread ?? 0 },
+        { href: "/admin/media", label: "Media library", icon: "media" as const },
       ],
     },
     {
       title: "Writing and work",
-      items: ["posts", "projects", "publications"].map((k) => ({ href: `/admin/${k}`, label: byKey[k].label })),
+      items: (["posts", "projects", "publications"] as const).map((k) => ({ href: `/admin/${k}`, label: byKey[k].label, icon: k })),
     },
     {
       title: "CV",
-      items: ["experience", "education", "skills", "certifications", "testimonials", "links"].map((k) => ({
+      items: (["experience", "education", "skills", "certifications", "testimonials", "links"] as const).map((k) => ({
         href: `/admin/${k}`,
         label: byKey[k].label,
+        icon: k,
       })),
     },
   ];
@@ -48,11 +50,16 @@ export default async function PanelLayout({ children }: { children: React.ReactN
         <AdminNav groups={groups} />
         <div className="admin-side__foot">
           <Link href="/" target="_blank">
+            <ArrowSquareOut size={16} aria-hidden="true" />
             View site
           </Link>
-          <Link href="/admin/account">Account</Link>
+          <Link href="/admin/account">
+            <UserCircle size={16} aria-hidden="true" />
+            Account
+          </Link>
           <form action={signOut}>
             <button type="submit" title={user.email ?? undefined}>
+              <SignOut size={16} aria-hidden="true" />
               Sign out
             </button>
           </form>

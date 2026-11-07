@@ -31,7 +31,8 @@ function mulberry32(seed: number) {
   };
 }
 
-const SCAN_START = 0.3;
+// Timing matches the CSS: the strip draws in, then the scan line sweeps across.
+const SCAN_START = 1.35;
 const SCAN_DURATION = 2.6;
 
 export function TrafficStrip() {
@@ -59,10 +60,9 @@ export function TrafficStrip() {
       role="img"
       aria-labelledby="strip-title"
     >
-      <title id="strip-title">
-        Illustration: a row of network flows, with six flagged as attacks: {FLAGS.map((f) => f.label).join(", ")}.
-      </title>
+      <title id="strip-title">{`Illustration: a row of network flows, with six flagged as attacks: ${FLAGS.map((f) => f.label).join(", ")}.`}</title>
       <line className="strip__baseline" x1="0" x2={WIDTH} y1={BASELINE + 0.5} y2={BASELINE + 0.5} />
+      <g className="strip__ticks">
       {ticks.map((t, i) =>
         t.label ? null : (
           <line key={i} className="strip__tick" x1={t.x} x2={t.x} y1={BASELINE} y2={BASELINE - t.h} />
@@ -82,6 +82,7 @@ export function TrafficStrip() {
           </g>
         );
       })}
+      </g>
       <line className="strip__scan" x1="0" x2="0" y1="4" y2={BASELINE + 4} />
     </svg>
   );

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CaretDown, CaretUp, Plus } from "@phosphor-icons/react/dist/ssr";
 import { notFound } from "next/navigation";
 import { requireAdmin } from "@/lib/auth";
 import { getCollection } from "@/lib/cms/collections";
@@ -31,6 +32,7 @@ export default async function CollectionPage({
           <p>{collection.description}</p>
         </div>
         <Link className="button" href={`/admin/${collection.key}/new`}>
+          <Plus size={16} weight="bold" aria-hidden="true" />
           Add {collection.singular}
         </Link>
       </div>
@@ -88,12 +90,12 @@ export default async function CollectionPage({
                   <div className="row__tools">
                     <form action={moveRecord.bind(null, collection.key, id, "up")}>
                       <button className="icon-btn" type="submit" disabled={i === 0} aria-label={`Move ${String(row[collection.titleField])} up`} title="Move up">
-                        ↑
+                        <CaretUp size={16} weight="bold" aria-hidden="true" />
                       </button>
                     </form>
                     <form action={moveRecord.bind(null, collection.key, id, "down")}>
                       <button className="icon-btn" type="submit" disabled={i === rows.length - 1} aria-label={`Move ${String(row[collection.titleField])} down`} title="Move down">
-                        ↓
+                        <CaretDown size={16} weight="bold" aria-hidden="true" />
                       </button>
                     </form>
                   </div>

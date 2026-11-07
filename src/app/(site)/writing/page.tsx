@@ -25,13 +25,13 @@ export default async function WritingPage({ searchParams }: { searchParams: Prom
 
   return (
     <>
-      <header className="page-head">
+      <header className="page-head" data-reveal>
         <h1>Writing</h1>
         {settings.writing_intro ? <p>{settings.writing_intro}</p> : null}
       </header>
 
       {tags.length > 1 ? (
-        <nav className="tag-filter" aria-label="Filter posts by tag">
+        <nav className="tag-filter" aria-label="Filter posts by tag" data-reveal style={{ ["--i" as string]: 1 }}>
           <ul className="tags">
             <li>
               <Link className="tag" href="/writing" aria-current={!tag ? "true" : undefined}>
@@ -68,11 +68,11 @@ export default async function WritingPage({ searchParams }: { searchParams: Prom
         </p>
       ) : (
         [...byYear.entries()].map(([year, items]) => (
-          <section key={year} className="year-group" aria-labelledby={`y-${year}`}>
+          <section key={year} className="year-group" aria-labelledby={`y-${year}`} data-reveal>
             <h2 id={`y-${year}`}>{year}</h2>
             <ul className="entry-list">
-              {items.map((post) => (
-                <li key={post.id} className="entry post-row">
+              {items.map((post, i) => (
+                <li key={post.id} className="entry post-row" data-reveal style={{ ["--i" as string]: i }}>
                   <time className="meta" dateTime={post.published_at ?? undefined}>
                     {formatDayMonth(post.published_at)}
                   </time>

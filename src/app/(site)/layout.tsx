@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { BackToTop, RevealObserver } from "@/components/Motion";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { getSettings, getSocialLinks } from "@/lib/data";
@@ -29,10 +30,12 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
         Skip to content
       </a>
       <SiteHeader name={settings.short_name || settings.full_name} />
-      <main id="main" className="site-main">
+      <main id="main" className="site-main" tabIndex={-1}>
         <div className="page">{children}</div>
       </main>
       <SiteFooter settings={settings} links={links} />
+      <BackToTop />
+      <RevealObserver />
     </>
   );
 }

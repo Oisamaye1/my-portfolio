@@ -1,5 +1,7 @@
 import Link from "next/link";
+import { EnvelopeSimple, Rss } from "@phosphor-icons/react/dist/ssr";
 import type { SiteSettings, SocialLink } from "@/lib/types";
+import { SocialIcon } from "./SocialIcon";
 
 export function SiteFooter({ settings, links }: { settings: SiteSettings; links: SocialLink[] }) {
   return (
@@ -8,7 +10,10 @@ export function SiteFooter({ settings, links }: { settings: SiteSettings; links:
         <div>
           {settings.email ? (
             <p>
-              <a href={`mailto:${settings.email}`}>{settings.email}</a>
+              <a className="icon-link" href={`mailto:${settings.email}`}>
+                <EnvelopeSimple size={18} aria-hidden="true" />
+                {settings.email}
+              </a>
             </p>
           ) : null}
           <p className="site-footer__note">
@@ -19,13 +24,17 @@ export function SiteFooter({ settings, links }: { settings: SiteSettings; links:
         <ul className="site-footer__links">
           {links.map((link) => (
             <li key={link.id}>
-              <a href={link.url} target="_blank" rel="noopener noreferrer me">
+              <a className="icon-link" href={link.url} target="_blank" rel="noopener noreferrer me">
+                <SocialIcon platform={link.platform} />
                 {link.label}
               </a>
             </li>
           ))}
           <li>
-            <Link href="/writing/rss.xml">RSS</Link>
+            <Link className="icon-link" href="/writing/rss.xml">
+              <Rss size={18} aria-hidden="true" />
+              RSS
+            </Link>
           </li>
         </ul>
       </div>

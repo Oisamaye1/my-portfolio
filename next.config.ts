@@ -13,6 +13,7 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     serverActions: { bodySizeLimit: "12mb" },
+    optimizePackageImports: ["@phosphor-icons/react"],
   },
 };
 
