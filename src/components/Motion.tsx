@@ -59,47 +59,6 @@ export function RevealObserver() {
   return null;
 }
 
-/**
- * Marks the header once the page scrolls, and slides it away while scrolling
- * down (back on scrolling up, or when anything inside it has focus).
- */
-export function HeaderState() {
-  useEffect(() => {
-    const header = document.querySelector<HTMLElement>(".site-header");
-    if (!header) return;
-    let lastY = window.scrollY;
-    let ticking = false;
-
-    const update = () => {
-      ticking = false;
-      const y = window.scrollY;
-      header.dataset.scrolled = String(y > 8);
-      const goingDown = y > lastY + 4;
-      const goingUp = y < lastY - 4;
-      if (header.contains(document.activeElement)) header.dataset.hidden = "false";
-      else if (goingDown && y > 160) header.dataset.hidden = "true";
-      else if (goingUp || y < 160) header.dataset.hidden = "false";
-      if (goingDown || goingUp) lastY = y;
-    };
-    const onScroll = () => {
-      if (!ticking) {
-        ticking = true;
-        requestAnimationFrame(update);
-      }
-    };
-    const onFocus = () => (header.dataset.hidden = "false");
-
-    update();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    header.addEventListener("focusin", onFocus);
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      header.removeEventListener("focusin", onFocus);
-    };
-  }, []);
-  return null;
-}
-
 export function BackToTop() {
   const [show, setShow] = useState(false);
   useEffect(() => {

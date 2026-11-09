@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { EnvelopeSimple, MapPin, Phone } from "@phosphor-icons/react/dist/ssr";
+import { ArrowUpRight, EnvelopeSimple, MapPin, Phone } from "@phosphor-icons/react/dist/ssr";
 import { SocialIcon } from "@/components/SocialIcon";
 import { getSettings, getSocialLinks } from "@/lib/data";
 import { ContactForm } from "./ContactForm";
@@ -14,60 +14,66 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function ContactPage() {
   const [settings, links] = await Promise.all([getSettings(), getSocialLinks()]);
   return (
-    <>
+    <div className="frame">
       <header className="page-head" data-reveal>
-        <h1>Contact</h1>
-        {settings.contact_intro ? <p>{settings.contact_intro}</p> : null}
+        <h1 className="title-xl">Get in touch.</h1>
+        {settings.contact_intro ? <p className="lede">{settings.contact_intro}</p> : null}
       </header>
-      <div className="contact">
-        <section aria-label="Send a message" data-reveal>
+      <section className="section contact" style={{ paddingTop: 0 }}>
+        <div data-reveal>
           <ContactForm />
-        </section>
-        <aside className="contact-card" aria-label="Other ways to reach me" data-reveal style={{ ["--i" as string]: 1 }}>
-          <dl>
+        </div>
+        <aside aria-label="Other ways to reach me" data-reveal style={{ ["--i" as string]: 1 }}>
+          <ul className="contact-list">
             {settings.email ? (
-              <div>
-                <dt><EnvelopeSimple size={15} aria-hidden="true" /> Email</dt>
-                <dd>
-                  <a href={`mailto:${settings.email}`}>{settings.email}</a>
-                </dd>
-              </div>
+              <li>
+                <a href={`mailto:${settings.email}`}>
+                  <span>
+                    <EnvelopeSimple size={18} aria-hidden="true" /> Email
+                  </span>
+                  <small>{settings.email}</small>
+                </a>
+              </li>
             ) : null}
             {settings.show_phone && settings.phone ? (
-              <div>
-                <dt><Phone size={15} aria-hidden="true" /> Phone</dt>
-                <dd>
-                  <a href={`tel:${settings.phone.replace(/\s+/g, "")}`}>{settings.phone}</a>
-                </dd>
-              </div>
+              <li>
+                <a href={`tel:${settings.phone.replace(/\s+/g, "")}`}>
+                  <span>
+                    <Phone size={18} aria-hidden="true" /> Phone
+                  </span>
+                  <small>{settings.phone}</small>
+                </a>
+              </li>
             ) : null}
             {settings.location ? (
-              <div>
-                <dt><MapPin size={15} aria-hidden="true" /> Based in</dt>
-                <dd>{settings.location}</dd>
-              </div>
+              <li>
+                <div>
+                  <span>
+                    <MapPin size={18} aria-hidden="true" /> Based in
+                  </span>
+                  <small>{settings.location}</small>
+                </div>
+              </li>
             ) : null}
-            {links.length ? (
-              <div>
-                <dt>Elsewhere</dt>
-                <dd>
-                  <ul>
-                    {links.map((l) => (
-                      <li key={l.id}>
-                        <a className="icon-link" href={l.url} target="_blank" rel="noopener noreferrer me">
-                          <SocialIcon platform={l.platform} />
-                          {l.label}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </dd>
-              </div>
-            ) : null}
-          </dl>
-          {settings.availability ? <p className="meta" style={{ marginTop: "1rem" }}>{settings.availability}</p> : null}
+            {links.map((l) => (
+              <li key={l.id}>
+                <a href={l.url} target="_blank" rel="noopener noreferrer me">
+                  <span>
+                    <SocialIcon platform={l.platform} /> {l.label}
+                  </span>
+                  <ArrowUpRight size={16} className="go" aria-hidden="true" />
+                </a>
+              </li>
+            ))}
+          </ul>
+          {settings.availability ? (
+            <p className="hero__now" style={{ marginTop: "1.5rem" }}>
+              <span className="live-dot" aria-hidden="true" />
+              <span>{settings.availability}</span>
+            </p>
+          ) : null}
         </aside>
-      </div>
-    </>
+      </section>
+    </div>
   );
 }

@@ -3,6 +3,11 @@ export type SiteSettings = {
   full_name: string;
   short_name: string;
   headline: string;
+  roles: string[];
+  statement: string;
+  about_headline: string;
+  quote_text: string;
+  quote_author: string;
   intro: string;
   now_text: string;
   bio: string;

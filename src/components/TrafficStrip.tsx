@@ -35,7 +35,7 @@ function mulberry32(seed: number) {
 const SCAN_START = 1.35;
 const SCAN_DURATION = 2.6;
 
-export function TrafficStrip() {
+export function TrafficStrip({ decorative = false }: { decorative?: boolean }) {
   const rand = mulberry32(20231001);
   const step = WIDTH / COUNT;
   const flagged = new Map(FLAGS.map((f) => [f.index, f.label]));
@@ -57,10 +57,11 @@ export function TrafficStrip() {
       className="strip"
       viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
       preserveAspectRatio="xMidYMid slice"
-      role="img"
-      aria-labelledby="strip-title"
+      {...(decorative ? { "aria-hidden": true } : { role: "img", "aria-labelledby": "strip-title" })}
     >
-      <title id="strip-title">{`Illustration: a row of network flows, with six flagged as attacks: ${FLAGS.map((f) => f.label).join(", ")}.`}</title>
+      {decorative ? null : (
+        <title id="strip-title">{`Illustration: a row of network flows, with six flagged as attacks: ${FLAGS.map((f) => f.label).join(", ")}.`}</title>
+      )}
       <line className="strip__baseline" x1="0" x2={WIDTH} y1={BASELINE + 0.5} y2={BASELINE + 0.5} />
       <g className="strip__ticks">
       {ticks.map((t, i) =>

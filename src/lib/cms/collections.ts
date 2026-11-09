@@ -306,16 +306,23 @@ export const settingsSections: { title: string; description: string; fields: Fie
     title: "Home page",
     description: "The first things visitors read.",
     fields: [
-      { name: "headline", label: "Headline", type: "textarea", rows: 2, required: true },
+      { name: "headline", label: "Headline (for search and sharing)", type: "textarea", rows: 2, required: true },
+      { name: "roles", label: "Rotating roles", type: "lines", rows: 5, help: "One per line. The hero cycles through these." },
       { name: "intro", label: "Introduction", type: "textarea", rows: 4 },
       { name: "now_text", label: "What you're doing now", type: "textarea", rows: 2 },
       { name: "availability", label: "Availability", type: "text", help: "e.g. Open to research collaborations." },
+      { name: "statement", label: "Statement", type: "textarea", rows: 3, help: "The large sentence under the organisations you've worked with." },
+      { name: "quote_text", label: "Closing quote", type: "textarea", rows: 2 },
+      { name: "quote_author", label: "Quote author", type: "text" },
     ],
   },
   {
     title: "About",
     description: "The longer biography at the top of the CV page.",
-    fields: [{ name: "bio", label: "Biography", type: "markdown", rows: 14 }],
+    fields: [
+      { name: "about_headline", label: "About headline", type: "text" },
+      { name: "bio", label: "Biography", type: "markdown", rows: 14 },
+    ],
   },
   {
     title: "Contact details",

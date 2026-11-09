@@ -85,8 +85,10 @@ export function ContactForm() {
         <label htmlFor="body">
           Message <span aria-hidden="true">*</span>
         </label>
-        <textarea {...field("body")} required maxLength={5000} />
-        <span className="field__count meta" aria-live="off">
+        <div className="glow-box">
+          <textarea {...field("body")} required maxLength={5000} placeholder="What would you like to talk about?" />
+        </div>
+        <span className="field__count" aria-live="off">
           {v.body.length.toLocaleString()} / 5,000
         </span>
         {errorFor("body") ? <span id="body-error" className="field__error">{errorFor("body")}</span> : null}
@@ -96,7 +98,7 @@ export function ContactForm() {
         <input id="website" name="website" tabIndex={-1} autoComplete="off" />
       </div>
       <div>
-        <button className="button" type="submit" disabled={pending} aria-busy={pending}>
+        <button className="pill pill--dark" type="submit" disabled={pending} aria-busy={pending}>
           {pending ? <span className="spinner" aria-hidden="true" /> : <PaperPlaneTilt size={17} weight="bold" aria-hidden="true" />}
           {pending ? "Sending…" : "Send message"}
         </button>

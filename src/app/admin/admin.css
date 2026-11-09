@@ -1,3 +1,103 @@
+/* The admin shares the site's design tokens; these map the names it was written with. */
+.admin,
+.login {
+  --paper: var(--bg);
+  --paper-raised: var(--surface);
+  --violet: var(--ink);
+  --violet-soft: var(--surface-2);
+  --rule: var(--line);
+  --rule-strong: var(--line-2);
+  --amber: var(--accent);
+  --font-display: var(--font-sans);
+  --font-serif: var(--font-sans);
+  --font-code: var(--font-mono);
+  --shadow-2: var(--shadow-lift);
+  background: var(--bg);
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 2.5rem;
+  padding: 0.5rem 1.05rem;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--cta);
+  background: var(--cta);
+  color: var(--cta-ink);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color var(--dur-2) var(--ease-out),
+    border-color var(--dur-2) var(--ease-out),
+    color var(--dur-2) var(--ease-out),
+    transform var(--dur-1) var(--ease-out);
+}
+
+.button:hover:not(:disabled) {
+  box-shadow: var(--shadow-lift);
+}
+
+.button:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.button:disabled {
+  opacity: 0.55;
+  cursor: progress;
+}
+
+.button--quiet {
+  background: var(--surface);
+  color: var(--ink);
+  border-color: var(--line-2);
+}
+
+.button--small {
+  min-height: 2.1rem;
+  padding: 0.35rem 0.8rem;
+  font-size: 0.8125rem;
+}
+
+.wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+}
+
+.wordmark__dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 /* Admin: same tokens as the site, but every surface is set in the sans for scanning. */
 .admin {
   font-family: var(--font-display);
@@ -947,4 +1047,11 @@
 
 .login__card {
   animation: fade-up var(--dur-4) var(--ease-out) both;
+}
+
+/* Let the phone tab strip scroll inside itself instead of widening the page. */
+.admin-side,
+.admin-nav,
+.admin-main {
+  min-width: 0;
 }

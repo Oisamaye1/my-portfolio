@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { BackToTop, RevealObserver } from "@/components/Motion";
 import { SiteFooter } from "@/components/SiteFooter";
-import { SiteHeader } from "@/components/SiteHeader";
-import { getSettings, getSocialLinks } from "@/lib/data";
+import { SiteNav } from "@/components/SiteNav";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { getProjects, getPublications, getSettings, getSocialLinks } from "@/lib/data";
 
 export async function generateMetadata(): Promise<Metadata> {
   const s = await getSettings();
@@ -23,15 +25,28 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function SiteLayout({ children }: { children: React.ReactNode }) {
-  const [settings, links] = await Promise.all([getSettings(), getSocialLinks()]);
+  const [settings, links, projects, papers] = await Promise.all([getSettings(), getSocialLinks(), getProjects(), getPublications()]);
   return (
     <>
       <a href="#main" className="skip-link">
         Skip to content
       </a>
-      <SiteHeader name={settings.short_name || settings.full_name} />
+      <Link href="/" className="corner-brand" aria-label={`${settings.full_name}, home`}>
+        {settings.avatar_url ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={settings.avatar_url} alt="" width={32} height={32} />
+        ) : null}
+        <span className="corner-brand__name">{settings.short_name || settings.full_name}</span>
+      </Link>
+      <SiteNav
+        projects={projects.map((p) => ({ slug: p.slug, title: p.title, summary: p.summary, year: p.year, cover_url: p.cover_url, tags: p.tags }))}
+        papers={papers.map((p) => ({ id: p.id, title: p.title, status: p.status, venue: p.venue, year: p.year, url: p.url }))}
+      />
+      <div className="corner-tools">
+        <ThemeToggle />
+      </div>
       <main id="main" className="site-main" tabIndex={-1}>
-        <div className="page">{children}</div>
+        {children}
       </main>
       <SiteFooter settings={settings} links={links} />
       <BackToTop />

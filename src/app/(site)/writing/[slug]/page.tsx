@@ -62,11 +62,12 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   return (
     <>
       <ReadingProgress />
-      <div className={showToc ? "article-layout" : undefined}>
+      <div className="frame">
+      <div className={showToc ? "article-layout page-head" : "page-head"}>
         <article className="article">
-          <Link href="/writing" className="article__back arrow-link arrow-link--back">
-            <ArrowLeft size={14} weight="bold" aria-hidden="true" />
-            Writing
+          <Link href="/writing" className="back-link">
+            <ArrowLeft size={14} aria-hidden="true" />
+            All writing
           </Link>
           <h1 className="article__title" data-reveal>
             {post.title}
@@ -76,24 +77,22 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
               {post.excerpt}
             </p>
           ) : null}
-          <div className="article__meta meta" data-reveal style={{ ["--i" as string]: 2 }}>
-            <time dateTime={post.published_at ?? undefined}>{formatDate(post.published_at)}</time>
-            <span>{readingMinutes(post.body)} min read</span>
+          <div className="article__meta" data-reveal style={{ ["--i" as string]: 2 }}>
+            <time className="mono" dateTime={post.published_at ?? undefined}>{formatDate(post.published_at)}</time>
+            <span className="mono">{readingMinutes(post.body)} min read</span>
             {post.tags.length ? (
-              <ul className="tags">
+              <span className="works__filters">
                 {post.tags.map((t) => (
-                  <li key={t}>
-                    <Link className="tag" href={`/writing?tag=${encodeURIComponent(t)}`}>
-                      {t}
-                    </Link>
-                  </li>
+                  <Link key={t} className="chip" href={`/writing?tag=${encodeURIComponent(t)}`}>
+                    {t}
+                  </Link>
                 ))}
-              </ul>
+              </span>
             ) : null}
             <CopyLink />
           </div>
           {post.cover_url ? (
-            <figure className="article__cover" style={{ margin: "2.5rem 0 0" }} data-reveal>
+            <figure className="article__cover" data-reveal>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={post.cover_url} alt="" />
             </figure>
@@ -106,7 +105,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
                 {older ? (
                   <Link href={`/writing/${older.slug}`} className="pager">
                     <span>
-                      <ArrowLeft size={13} weight="bold" aria-hidden="true" /> Previous post
+                      <ArrowLeft size={13} aria-hidden="true" /> Previous post
                     </span>
                     <strong>{older.title}</strong>
                   </Link>
@@ -116,7 +115,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
                 {newer ? (
                   <Link href={`/writing/${newer.slug}`} className="pager">
                     <span>
-                      Next post <ArrowRight size={13} weight="bold" aria-hidden="true" />
+                      Next post <ArrowRight size={13} aria-hidden="true" />
                     </span>
                     <strong>{newer.title}</strong>
                   </Link>
@@ -139,6 +138,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
             <TocTracker ids={toc.map((t) => t.id)} />
           </aside>
         ) : null}
+      </div>
       </div>
     </>
   );
